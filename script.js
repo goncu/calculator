@@ -15,7 +15,6 @@ const clearAll = function () {
   displayedValue = 0;
   operatorEntered = false;
   operator = ``;
-  truncateAndDisplay();
 };
 //functions for element selection
 const classSelect = (a) => document.querySelector(`.${a}`);
@@ -93,7 +92,6 @@ const operationResult = function () {
     if (secondValue === 0 && operator === `/`) {
       classSelect(`to-display`).textContent = `ERR`;
       clearAll();
-      console.log(displayedValue);
     } else {
       finalValue = parseFloat(
         operate(firstValue, secondValue, operator).toFixed(2)
@@ -145,16 +143,24 @@ idSelect(`btn-divide`).addEventListener(`click`, function () {
 idSelect(`btn-equal`).addEventListener(`click`, operationResult);
 idSelect(`btn-point`).addEventListener(`click`, enterDecimal);
 idSelect(`btn-delete`).addEventListener(`click`, deleteF);
-idSelect(`btn-clear`).addEventListener(`click`, clearAll);
+idSelect(`btn-clear`).addEventListener(`click`, () => {
+  clearAll();
+  truncateAndDisplay();
+});
 //event listeners for keypresses
 document.addEventListener(`keydown`, function (el) {
   const numbers = [`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `0`];
   const operators = [`+`, `-`, `*`, `/`];
+  console.log(el);
   if (numbers.includes(el.key)) enterNumber(el.key);
   if (operators.includes(el.key)) operatorInput(el.key);
-  if (el.key === `Enter`) operationResult();
+  if (el.code === `NumpadEnter`) operationResult();
+  if (el.code === `Enter`) operationResult();
   if (el.key === `=`) operationResult();
   if (el.key === `Backspace`) deleteF();
   if (el.key === `.`) enterDecimal();
-  if (el.key === `Escape`) clearAll();
+  if (el.key === `Escape`) {
+    clearAll();
+    truncateAndDisplay();
+  }
 });
