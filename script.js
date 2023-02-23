@@ -5,7 +5,9 @@ let numberValue = [],
   finalValue = 0,
   displayedValue = 0,
   operatorEntered = false,
-  operator = ``;
+  operator = ``,
+  lastOperation = 0,
+  clearDisplay = false;
 //function for resetting and initializing
 const clearAll = function () {
   numberValue = [];
@@ -15,6 +17,7 @@ const clearAll = function () {
   displayedValue = 0;
   operatorEntered = false;
   operator = ``;
+  classSelect(`last-op`).innerHTML = ``;
 };
 //functions for element selection
 const classSelect = (a) => document.querySelector(`.${a}`);
@@ -52,6 +55,7 @@ const operate = function (a, b, operator) {
 };
 //function for registering the operator entered
 const operatorInput = function (op) {
+  if (clearDisplay) clearDisplay = false;
   if (!operatorEntered) {
     operatorEntered = true;
     if (!firstValue) firstValue = Number(numberValue.join(``));
@@ -70,11 +74,15 @@ const operatorInput = function (op) {
 };
 //function for registering the number entered
 const enterNumber = function (num) {
-  if (displayedValue === 0) {
+  if (clearDisplay) {
+    displayedValue = `${num}`;
+    firstValue = 0;
+  } else if (displayedValue === 0) {
     displayedValue = `${num}`;
   } else {
     displayedValue += `${num}`;
   }
+  clearDisplay = false;
   truncateAndDisplay();
   numberValue.push(num);
 };
@@ -96,6 +104,8 @@ const operationResult = function () {
       finalValue = parseFloat(
         operate(firstValue, secondValue, operator).toFixed(2)
       );
+      lastOperation = `${firstValue} ${operator} ${secondValue} = ${finalValue}`;
+      classSelect(`last-op`).textContent = lastOperation;
       displayedValue = finalValue;
       numberValue = [];
       firstValue = finalValue;
@@ -108,7 +118,7 @@ const operationResult = function () {
 };
 //function for displaying the current value, and also truncating in case of overflow
 const truncateAndDisplay = function () {
-  if (displayedValue.length > 10) displayedValue = displayedValue.substring(1);
+  if (displayedValue.length > 9) displayedValue = displayedValue.substring(1);
   classSelect(`to-display`).textContent = displayedValue;
 };
 //function for deleting last entered number
@@ -140,7 +150,10 @@ idSelect(`btn-multiply`).addEventListener(`click`, function () {
 idSelect(`btn-divide`).addEventListener(`click`, function () {
   operatorInput(`/`);
 });
-idSelect(`btn-equal`).addEventListener(`click`, operationResult);
+idSelect(`btn-equal`).addEventListener(`click`, () => {
+  clearDisplay = true;
+  operationResult();
+});
 idSelect(`btn-point`).addEventListener(`click`, enterDecimal);
 idSelect(`btn-delete`).addEventListener(`click`, deleteF);
 idSelect(`btn-clear`).addEventListener(`click`, () => {
@@ -156,7 +169,10 @@ document.addEventListener(`keydown`, function (el) {
   if (operators.includes(el.key)) operatorInput(el.key);
   if (el.code === `NumpadEnter`) operationResult();
   if (el.code === `Enter`) operationResult();
-  if (el.key === `=`) operationResult();
+  if (el.key === `=`) {
+    clearDisplay = true;
+    operationResult();
+  }
   if (el.key === `Backspace`) deleteF();
   if (el.key === `.`) enterDecimal();
   if (el.key === `Escape`) {

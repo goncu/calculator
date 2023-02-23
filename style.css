@@ -26,6 +26,7 @@ body {
   border: 2px solid black;
   border-radius: 15px;
   display: flex;
+  flex-direction: column;
   justify-content: end;
   align-items: flex-end;
 }
@@ -33,6 +34,11 @@ body {
 .to-display {
   font-family: "Rubik", sans-serif;
   font-size: 64px;
+  margin-right: 10px;
+}
+.last-op {
+  font-family: "Rubik", sans-serif;
+  font-size: 32px;
   margin-right: 10px;
 }
 
