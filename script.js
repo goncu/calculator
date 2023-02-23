@@ -129,6 +129,7 @@ const deleteF = function () {
   ) {
     numberValue.pop();
     displayedValue = displayedValue.substring(0, displayedValue.length - 1);
+    if (displayedValue === ``) displayedValue = 0;
     truncateAndDisplay();
   }
 };
@@ -164,7 +165,6 @@ idSelect(`btn-clear`).addEventListener(`click`, () => {
 document.addEventListener(`keydown`, function (el) {
   const numbers = [`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `0`];
   const operators = [`+`, `-`, `*`, `/`];
-  console.log(el);
   if (numbers.includes(el.key)) enterNumber(el.key);
   if (operators.includes(el.key)) operatorInput(el.key);
   if (el.code === `NumpadEnter`) operationResult();
