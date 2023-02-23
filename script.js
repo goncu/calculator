@@ -108,7 +108,7 @@ const operationResult = function () {
 };
 //function for displaying the current value, and also truncating in case of overflow
 const truncateAndDisplay = function () {
-  if (displayedValue.length > 10) displayedValue = displayedValue.substring(1);
+  if (displayedValue.length > 9) displayedValue = displayedValue.substring(1);
   classSelect(`to-display`).textContent = displayedValue;
 };
 //function for deleting last entered number
